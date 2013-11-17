@@ -3,6 +3,8 @@ var stround = require('../lib');
 var round = stround.round;
 var modes = stround.modes;
 
+
+
 describe('round (ceiling)', function() {
   it('leaves integers as-is', function() {
     expect(round('4', 0, modes.CEILING)).to.be('4');
@@ -20,6 +22,10 @@ describe('round (ceiling)', function() {
     expect(round('4', 2, modes.CEILING)).to.be('4.00');
     expect(round('4.00003', 2, modes.CEILING)).to.be('4.01');
     expect(round('9.901', 1, modes.CEILING)).to.be('10.0');
+  });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.9', 0, modes.CEILING)).to.be('1000000000000000000000000000');
   });
 });
 
@@ -41,6 +47,10 @@ describe('round (floor)', function() {
     expect(round('4.01999', 2, modes.FLOOR)).to.be('4.01');
     expect(round('-9.901', 1, modes.FLOOR)).to.be('-10.0');
   });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.9', 0, modes.FLOOR)).to.be('999999999999999999999999999');
+  });
 });
 
 describe('round (down)', function() {
@@ -61,6 +71,10 @@ describe('round (down)', function() {
     expect(round('4.01999', 2, modes.DOWN)).to.be('4.01');
     expect(round('-9.901', 1, modes.DOWN)).to.be('-9.9');
   });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.9', 0, modes.DOWN)).to.be('999999999999999999999999999');
+  });
 });
 
 describe('round (up)', function() {
@@ -80,6 +94,10 @@ describe('round (up)', function() {
     expect(round('4', 2, modes.UP)).to.be('4.00');
     expect(round('4.01999', 2, modes.UP)).to.be('4.02');
     expect(round('-9.901', 1, modes.UP)).to.be('-10.0');
+  });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.9', 0, modes.UP)).to.be('1000000000000000000000000000');
   });
 });
 
@@ -110,6 +128,10 @@ describe('round (half-even)', function() {
     expect(round('-4.015', 2, modes.HALF_EVEN)).to.be('-4.02');
     expect(round('-4.025', 2, modes.HALF_EVEN)).to.be('-4.02');
   });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.5', 0, modes.HALF_EVEN)).to.be('1000000000000000000000000000');
+  });
 });
 
 describe('round (half-down)', function() {
@@ -139,6 +161,10 @@ describe('round (half-down)', function() {
     expect(round('-4.015', 2, modes.HALF_DOWN)).to.be('-4.01');
     expect(round('-4.025', 2, modes.HALF_DOWN)).to.be('-4.02');
   });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.5', 0, modes.HALF_DOWN)).to.be('999999999999999999999999999');
+  });
 });
 
 describe('round (half-up)', function() {
@@ -167,5 +193,9 @@ describe('round (half-up)', function() {
     expect(round('4.025', 2, modes.HALF_UP)).to.be('4.03');
     expect(round('-4.015', 2, modes.HALF_UP)).to.be('-4.02');
     expect(round('-4.025', 2, modes.HALF_UP)).to.be('-4.03');
+  });
+
+  it('works with very large numbers', function() {
+    expect(round('999999999999999999999999999.5', 0, modes.HALF_UP)).to.be('1000000000000000000000000000');
   });
 });
