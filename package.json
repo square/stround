@@ -7,7 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --recursive --reporter spec --no-colors --timeout 500 --async-only test"
+    "test": "mocha --recursive --reporter spec --no-colors --timeout 500 test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:square/stround.git"
   },
   "keywords": [
     "math",
@@ -15,5 +19,9 @@
     "strings"
   ],
   "author": "Square, Inc.",
-  "license": "Apache 2"
+  "license": "Apache 2",
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "expect.js": "~0.2.0"
+  }
 }
