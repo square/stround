@@ -3,7 +3,39 @@ var stround = require('../lib');
 var round = stround.round;
 var modes = stround.modes;
 
+describe('round', function() {
+  it('accepts strings', function() {
+    expect(round('123.45')).to.be('123');
+  });
 
+  it('accepts numbers', function() {
+    expect(round(123.45)).to.be('123');
+  });
+
+  it('does not interpret an empty string and simply returns it', function() {
+    expect(round('')).to.be('');
+  });
+
+  it('uses half-even rounding and zero precision by default', function() {
+    expect(round('2.5')).to.be('2');
+    expect(round('3.5')).to.be('4');
+  });
+
+  it('throws when given a malformed number', function() {
+    expect(function(){ round('1.1.1'); })
+      .to.throwError(/cannot round malformed number: 1\.1\.1/);
+    expect(function(){ round(undefined); })
+      .to.throwError(/expected a string or number, got: undefined/);
+    expect(function(){ round('hey'); })
+      .to.throwError(/cannot round malformed number: hey/);
+  });
+
+  it('handles special numbers correctly', function() {
+    expect(round('NaN')).to.be('NaN');
+    expect(round('Infinity')).to.be('Infinity');
+    expect(round('-Infinity')).to.be('-Infinity');
+  });
+});
 
 describe('round (ceiling)', function() {
   it('leaves integers as-is', function() {
