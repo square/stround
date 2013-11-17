@@ -1,0 +1,19 @@
+{
+  "name": "stround",
+  "version": "0.0.0",
+  "description": "Rounding methods for exact numbers using strings.",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive --reporter spec --no-colors --timeout 500 --async-only test"
+  },
+  "keywords": [
+    "math",
+    "rounding",
+    "strings"
+  ],
+  "author": "Square, Inc.",
+  "license": "Apache 2"
+}
