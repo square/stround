@@ -156,7 +156,7 @@ $ npm test
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-Any contributors to the master lgtm repository must sign the [Individual
+Any contributors to the master stround repository must sign the [Individual
 Contributor License Agreement (CLA)][cla].  It's a short form that covers our
 bases and makes sure you're eligible to contribute.
 
