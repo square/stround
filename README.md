@@ -1,6 +1,6 @@
 # stround
 
-stround provides abitrary precision rounding of the types supported by typical
+stround provides arbitrary precision rounding of the types supported by typical
 number formatting libraries (e.g. NSNumberFormatter, BigDecimal) for numbers
 represented as strings. The purpose is to avoid floating point errors while
 still working with decimal values.
