@@ -141,6 +141,13 @@ It is sometimes convenient to adjust the exponent of a number, too:
 '1.234'
 ```
 
+And sometimes it's useful to keep the decimal parts in a tuple:
+
+```js
+> stround.shift([false, '12', '34'], 2)
+[false, '1234', '']
+```
+
 ## Contributing
 
 ### Setup
