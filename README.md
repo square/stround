@@ -132,6 +132,15 @@ Round towards the nearest integer, or away from zero if equidistant:
 '3'
 ```
 
+It is sometimes convenient to adjust the exponent of a number, too:
+
+```js
+> stround.shift('12', 2);
+'1200'
+> stround.shift('123.4', -2);
+'1.234'
+```
+
 ## Contributing
 
 ### Setup

@@ -2,6 +2,7 @@ var expect = require('expect.js');
 var stround = require('../lib');
 var round = stround.round;
 var modes = stround.modes;
+var shift = stround.shift;
 
 describe('round', function() {
   it('accepts strings', function() {
@@ -229,5 +230,43 @@ describe('round (half-up)', function() {
 
   it('works with very large numbers', function() {
     expect(round('999999999999999999999999999.5', 0, modes.HALF_UP)).to.be('1000000000000000000000000000');
+  });
+});
+
+describe('shift', function() {
+  it('leaves values alone when shifting by zero', function() {
+    expect(shift('12', 0)).to.be('12');
+    expect(shift(12, 0)).to.be('12');
+  });
+
+  it('pads the right with zeros given an integer', function() {
+    expect(shift('847', 4)).to.be('8470000');
+  });
+
+  it('moves fractional digits over to the integer side', function() {
+    expect(shift('12.34', 2)).to.be('1234');
+  });
+
+  it('leaves a fractional part if it is not entirely shifted off', function() {
+    expect(shift('12.34', 1)).to.be('123.4');
+  });
+
+  it('handles negative numbers correctly', function() {
+    expect(shift('-5.987', 5)).to.be('-598700');
+  });
+
+  it('handles negative exponents correctly', function() {
+    expect(shift('12', -2)).to.be('0.12');
+  });
+
+  it('round-trips correctly', function() {
+    expect(shift(shift('12345.678900', 4), -4)).to.be('12345.678900');
+    expect(shift(shift('1', -4), 4)).to.be('1');
+  });
+
+  it('handles special numbers correctly', function() {
+    expect(shift('Infinity', 1)).to.be('Infinity');
+    expect(shift('-Infinity', 1)).to.be('-Infinity');
+    expect(shift('NaN', 1)).to.be('NaN');
   });
 });
