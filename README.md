@@ -150,6 +150,8 @@ And sometimes it's useful to keep the decimal parts in a tuple:
 
 ## Contributing
 
+[![Build Status](https://travis-ci.org/square/stround.png?branch=master)](https://travis-ci.org/square/stround)
+
 ### Setup
 
 First, install the development dependencies:
