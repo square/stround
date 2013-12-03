@@ -10,11 +10,9 @@ usage() {
     code=1
   fi
 
-  echo "Usage: $(basename $0) [--help] [--[no-]wrap]" >&2
+  echo "Usage: $(basename $0) [--help]" >&2
   exit $code
 }
-
-wrap=true
 
 while [ $# -gt 0 ]; do
   arg=$1
@@ -23,14 +21,6 @@ while [ $# -gt 0 ]; do
   case "$arg" in
     -h|--help)
       usage
-      ;;
-
-    -w|--wrap)
-      wrap=true
-      ;;
-
-    -W|--no-wrap)
-      wrap=false
       ;;
 
     -*)
@@ -44,11 +34,7 @@ while [ $# -gt 0 ]; do
 done
 
 js=$(mktemp /tmp/source.js.XXXXX)
-$(dirname $0)/build --no-wrap --exports > $js
-
-if [ "$wrap" == "true" ]; then
-  echo '(function(window) {'
-fi
+$(dirname $0)/build --exports > $js
 
 set -x
 
@@ -56,9 +42,3 @@ closure-compiler \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --js $js \
   --jscomp_error checkTypes
-
-set +x
-
-if [ "$wrap" == "true" ]; then
-  echo '}).call(this, this)'
-fi

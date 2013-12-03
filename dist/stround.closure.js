@@ -1,5 +1,3 @@
-(function(window) {
-var index__module;
 /*
  * lib/index.js CONTENTS
  */
@@ -8,36 +6,51 @@ var index__module;
 var stround;
 if (!stround) { stround = {}; }
 
-/** @const */ var CEILING = 0;
-/** @const */ var FLOOR = 1;
-/** @const */ var DOWN = 2;
-/** @const */ var UP = 3;
-/** @const */ var HALF_EVEN = 4;
-/** @const */ var HALF_DOWN = 5;
-/** @const */ var HALF_UP = 6;
-
 /**
  * Enum for the available rounding modes.
  *
  * @enum {number}
  */
-stround.RoundingMode = {
-  CEILING: CEILING,
-  FLOOR: FLOOR,
-  DOWN: DOWN,
-  UP: UP,
-  HALF_EVEN: HALF_EVEN,
-  HALF_DOWN: HALF_DOWN,
-  HALF_UP: HALF_UP
+stround.modes = {
+  CEILING: 0,
+  FLOOR: 1,
+  DOWN: 2,
+  UP: 3,
+  HALF_EVEN: 4,
+  HALF_DOWN: 5,
+  HALF_UP: 6
 };
 
-stround['modes'] = stround.RoundingMode;
 
-/** @const */ var NEG = '-';
-/** @const */ var SEP = '.';
-/** @const */ var NEG_PATTERN = '-';
-/** @const */ var SEP_PATTERN = '\\.';
-/** @const */ var NUMBER_PATTERN = new RegExp('^('+NEG_PATTERN+')?(\\d*)(?:'+SEP_PATTERN+'(\\d*))?$');
+/**
+ * @const
+ * @private
+ * */
+stround.NEG = '-';
+
+/**
+ * @const
+ * @private
+ * */
+stround.SEP = '.';
+
+/**
+ * @const
+ * @private
+ * */
+stround.NEG_PATTERN = '-';
+
+/**
+ * @const
+ * @private
+ * */
+stround.SEP_PATTERN = '\\.';
+
+/**
+ * @const
+ * @private
+ * */
+stround.NUMBER_PATTERN = new RegExp('^('+stround.NEG_PATTERN+')?(\\d*)(?:'+stround.SEP_PATTERN+'(\\d*))?$');
 
 /**
  * Increments the given integer represented by a string by one.
@@ -50,7 +63,7 @@ stround['modes'] = stround.RoundingMode;
  * @return {string}
  * @private
  */
-function increment(strint) {
+stround.increment = function(strint) {
   var length = strint.length;
 
   if (length === 0) {
@@ -60,11 +73,11 @@ function increment(strint) {
   var last = parseInt(strint[length-1], 10);
 
   if (last === 9) {
-    return increment(strint.slice(0, length-1)) + '0';
+    return stround.increment(strint.slice(0, length-1)) + '0';
   } else {
     return strint.slice(0, length-1) + (last+1);
   }
-}
+};
 
 /**
  * Parses the given decimal string into its component parts.
@@ -81,7 +94,7 @@ stround.parse = function(strnum) {
       return null;
   }
 
-  var match = strnum.match(NUMBER_PATTERN);
+  var match = strnum.match(stround.NUMBER_PATTERN);
 
   if (!match) {
     throw new Error('cannot round malformed number: '+strnum);
@@ -124,7 +137,7 @@ stround.format = function(parts) {
     }
   }
 
-  return (negative ? NEG+intPart : intPart) + (fracPart.length ? SEP+fracPart : '');
+  return (negative ? stround.NEG+intPart : intPart) + (fracPart.length ? stround.SEP+fracPart : '');
 };
 
 /**
@@ -191,7 +204,7 @@ stround.shift = function(strnum, exponent) {
  *
  * @param {string|number} strnum
  * @param {number} precision
- * @param {stround.RoundingMode} mode
+ * @param {stround.modes} mode
  * @return {string}
  */
 stround.round = function(strnum, precision, mode) {
@@ -207,12 +220,12 @@ stround.round = function(strnum, precision, mode) {
     return strnum;
   }
 
-  if (typeof precision === 'undefined') {
+  if (precision === undefined) {
     precision = 0;
   }
 
-  if (typeof mode === 'undefined') {
-    mode = stround.RoundingMode.HALF_EVEN;
+  if (mode === undefined) {
+    mode = stround.modes.HALF_EVEN;
   }
 
   var parsed = stround.parse(strnum);
@@ -232,7 +245,7 @@ stround.round = function(strnum, precision, mode) {
   var fracPart = parsed[2];
 
   switch (mode) {
-    case CEILING: case FLOOR: case UP:
+    case stround.modes.CEILING: case stround.modes.FLOOR: case stround.modes.UP:
       var foundNonZeroDigit = false;
       for (i = 0, length = fracPart.length; i < length; i++) {
         if (fracPart[i] !== '0') {
@@ -241,20 +254,20 @@ stround.round = function(strnum, precision, mode) {
         }
       }
       if (foundNonZeroDigit) {
-        if (mode === UP || (negative !== (mode === CEILING))) {
+        if (mode === stround.modes.UP || (negative !== (mode === stround.modes.CEILING))) {
           intPart = increment(intPart);
         }
       }
       break;
 
-    case HALF_EVEN: case HALF_DOWN: case HALF_UP:
+    case stround.modes.HALF_EVEN: case stround.modes.HALF_DOWN: case stround.modes.HALF_UP:
       var shouldRoundUp = false;
       var firstFracPartDigit = parseInt(fracPart[0], 10);
 
       if (firstFracPartDigit > 5) {
         shouldRoundUp = true;
       } else if (firstFracPartDigit === 5) {
-        if (mode === HALF_UP) {
+        if (mode === stround.modes.HALF_UP) {
           shouldRoundUp = true;
         }
 
@@ -267,14 +280,14 @@ stround.round = function(strnum, precision, mode) {
           }
         }
 
-        if (!shouldRoundUp && mode === HALF_EVEN) {
+        if (!shouldRoundUp && mode === stround.modes.HALF_EVEN) {
           var lastIntPartDigit = parseInt(intPart[intPart.length-1], 10);
           shouldRoundUp = lastIntPartDigit % 2 !== 0;
         }
       }
 
       if (shouldRoundUp) {
-        intPart = increment(intPart);
+        intPart = stround.increment(intPart);
       }
       break;
   }
@@ -282,6 +295,4 @@ stround.round = function(strnum, precision, mode) {
   return stround.format(stround.shiftParts([negative, intPart, ''], -precision));
 };
 
-index__module = stround;
-window['stround'] = index__module;
-}).call(this, this);
+this["stround"] = stround;

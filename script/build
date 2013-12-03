@@ -14,13 +14,11 @@ usage() {
   echo >&2
   echo "Options:" >&2
   echo >&2
-  echo "  -w/W, --[no-]wrap       wrap the code in an IFFE (default=true)" >&2
   echo "  -e/E, --[no-]exports    include exports for closure-compiler (default=false)" >&2
   echo "  -h,   --help            print this help message" >&2
   exit $code
 }
 
-wrap=true
 exports=false
 
 while [ $# -gt 0 ]; do
@@ -30,14 +28,6 @@ while [ $# -gt 0 ]; do
   case "$arg" in
     -h|--help)
       usage
-      ;;
-
-    -w|--wrap)
-      wrap=true
-      ;;
-
-    -W|--no-wrap)
-      wrap=false
       ;;
 
     -e|--exports)
@@ -59,20 +49,24 @@ while [ $# -gt 0 ]; do
 done
 
 rename-export() {
-  perl -pe "s/module.exports = /${1}__module = /"
+  perl -pe "s/module.exports = /$1 = /"
 }
 
 process-file() {
   file=$1
+  global=$2
   base=$(basename $file .js | perl -pe "s/\\./_/g")
 
-  echo "var ${base}__module;"
+  if [ -z "$global" ]; then
+    global="${base}__module"
+    echo "var $global;"
+  fi
 
   echo "/*"
   echo " * $file CONTENTS"
   echo " */"
 
-  cat $file | rename-export $base
+  cat $file | rename-export $global
 
   if [ "$exports" == "true" ]; then
     echo "/*"
@@ -83,13 +77,4 @@ process-file() {
   fi
 }
 
-if [ "$wrap" == "true" ]; then
-  echo "(function(window) {"
-fi
-
-process-file lib/index.js
-echo "window['stround'] = index__module;"
-
-if [ "$wrap" == "true" ]; then
-  echo "}).call(this, this);"
-fi
+process-file lib/index.js "this[\"stround\"]"
