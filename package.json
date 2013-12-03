@@ -1,6 +1,6 @@
 {
   "name": "stround",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Rounding methods for exact numbers using strings.",
   "main": "lib/index.js",
   "directories": {
