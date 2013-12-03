@@ -255,7 +255,7 @@ stround.round = function(strnum, precision, mode) {
       }
       if (foundNonZeroDigit) {
         if (mode === stround.modes.UP || (negative !== (mode === stround.modes.CEILING))) {
-          intPart = increment(intPart);
+          intPart = stround.increment(intPart);
         }
       }
       break;

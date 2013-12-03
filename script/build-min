@@ -41,4 +41,8 @@ set -x
 closure-compiler \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --js $js \
-  --jscomp_error checkTypes
+  --jscomp_error checkTypes \
+  --jscomp_error undefinedVars \
+  --jscomp_error uselessCode \
+  --jscomp_error checkRegExp \
+  --jscomp_off globalThis
