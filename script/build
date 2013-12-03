@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage() {
+  if [ -z "$1" ]; then
+    code=0
+  else
+    echo "error: $1" >&2
+    code=1
+  fi
+
+  echo "Usage: $(basename $0) [opts]" >&2
+  echo >&2
+  echo "Options:" >&2
+  echo >&2
+  echo "  -w/W, --[no-]wrap       wrap the code in an IFFE (default=true)" >&2
+  echo "  -e/E, --[no-]exports    include exports for closure-compiler (default=false)" >&2
+  echo "  -h,   --help            print this help message" >&2
+  exit $code
+}
+
+wrap=true
+exports=false
+
+while [ $# -gt 0 ]; do
+  arg=$1
+  shift
+
+  case "$arg" in
+    -h|--help)
+      usage
+      ;;
+
+    -w|--wrap)
+      wrap=true
+      ;;
+
+    -W|--no-wrap)
+      wrap=false
+      ;;
+
+    -e|--exports)
+      exports=true
+      ;;
+
+    -E|--no-exports)
+      exports=false
+      ;;
+
+    -*)
+      usage "unexpected option: $arg"
+      ;;
+
+    *)
+      usage "unexpected argument: $arg"
+      ;;
+  esac
+done
+
+rename-export() {
+  perl -pe "s/module.exports = /${1}__module = /"
+}
+
+process-file() {
+  file=$1
+  base=$(basename $file .js | perl -pe "s/\\./_/g")
+
+  echo "var ${base}__module;"
+
+  echo "/*"
+  echo " * $file CONTENTS"
+  echo " */"
+
+  cat $file | rename-export $base
+
+  if [ "$exports" == "true" ]; then
+    echo "/*"
+    echo " * $file EXPORTS"
+    echo " */"
+
+    ./script/build-exports $file
+  fi
+}
+
+if [ "$wrap" == "true" ]; then
+  echo "(function(window) {"
+fi
+
+process-file lib/index.js
+echo "window['stround'] = index__module;"
+
+if [ "$wrap" == "true" ]; then
+  echo "}).call(this, this);"
+fi

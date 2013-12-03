@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "build": "make clean all",
     "test": "mocha --recursive --reporter spec --no-colors --timeout 500 test"
   },
   "repository": {
@@ -22,6 +23,7 @@
   "license": "Apache 2",
   "devDependencies": {
     "mocha": "~1.14.0",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "through": "~2.3.4"
   }
 }

@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+
+var through = require('through');
+
+function stream() {
+  var data = '';
+  return through(write, end);
+
+  function write (buf) { data += buf; }
+  function end () {
+      this.queue(processSource(data));
+      this.queue(null);
+  }
+}
+
+var COMMENT_START = '/**';
+var COMMENT_END = '*/\n';
+var PRIVATE = '@private';
+var ENUM = '@enum';
+var ASSIGNMENT = ' = ';
+var OBJECT_START = '{';
+var OBJECT_END = '}';
+
+function processSource(data) {
+  var position = 0;
+  var exports = [];
+
+  while ((position = data.indexOf(COMMENT_START, position)) !== -1) {
+    var commentStart = position;
+    position = data.indexOf(COMMENT_END, commentStart);
+
+    if (position === -1) { break; }
+
+    var privatePosition = data.indexOf(PRIVATE, commentStart);
+    var isPrivate = commentStart < privatePosition && privatePosition < position;
+    if (isPrivate) { continue; }
+
+    var enumPosition = data.indexOf(ENUM, commentStart);
+    var isEnum = commentStart < enumPosition && enumPosition < position;
+
+    var startOfExport = position + COMMENT_END.length;
+    if (data[startOfExport] === ' ') { continue; }
+
+    var endOfExport = data.indexOf(ASSIGNMENT, startOfExport);
+    if (endOfExport === -1) { continue; }
+    position = endOfExport;
+
+    var exportString = data.slice(startOfExport, endOfExport);
+    if (exportString.indexOf('\n') !== -1) { position = startOfExport; continue; }
+
+    var lastDot = exportString.lastIndexOf('.');
+    if (lastDot === -1) { continue; }
+
+    var object = exportString.slice(0, lastDot);
+    var property = exportString.slice(lastDot+1);
+
+    exports.push(
+      object + '[' + JSON.stringify(property) + '] = ' + exportString + ';');
+
+    if (isEnum) {
+      var startOfEnumValue = data.indexOf(OBJECT_START, endOfExport);
+      var endOfEnumValue = data.indexOf(OBJECT_END, startOfEnumValue);
+      var enumValue = data.slice(startOfEnumValue, endOfEnumValue);
+      var lines = enumValue.split('\n');
+
+      for (var i = 0; i < lines.length; i++) {
+        var match = lines[i].match(/^ *([_A-Z]+): /);
+        if (match) {
+          exports.push(exportString + '[' + JSON.stringify(match[1]) + '] = ' + exportString + '.' + match[1] + ';');
+        }
+      }
+    }
+  }
+
+  return exports.join('\n');
+}
+
+function showUsage(code) {
+  console.error('Usage: '+__filename+' [FILE]');
+  process.exit(+code);
+}
+
+function run(args) {
+  if (args.indexOf('-h') !== -1 || args.indexOf('--help') !== -1) {
+    showUsage();
+  }
+
+  var input;
+  if (process.stdin.isTTY) {
+    if (args.length === 0) {
+      showUsage(1);
+    }
+    input = require('fs').createReadStream(args[0]);
+  } else {
+    if (args.length !== 0) {
+      showUsage(1);
+    }
+    input = process.stdin;
+  }
+
+  input.pipe(stream()).pipe(process.stdout);
+}
+
+if (require.main === module) {
+  run(process.argv.slice(2));
+}

@@ -1,3 +1,8 @@
+(function(window) {
+var index__module;
+/*
+ * lib/index.js CONTENTS
+ */
 /* jshint sub: true */
 
 var stround;
@@ -277,4 +282,6 @@ stround.round = function(strnum, precision, mode) {
   return stround.format(stround.shiftParts([negative, intPart, ''], -precision));
 };
 
-module.exports = stround;
+index__module = stround;
+window['stround'] = index__module;
+}).call(this, this);
