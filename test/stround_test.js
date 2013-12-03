@@ -1,8 +1,16 @@
 var expect = require('expect.js');
-var stround = require('../lib');
+
+var stround;
+if (process.env.TEST_MODE) {
+  stround = require('../dist/stround.'+process.env.TEST_MODE).stround;
+} else {
+  stround = require('../lib');
+}
+
 var round = stround.round;
 var modes = stround.modes;
 var shift = stround.shift;
+var shiftParts = stround.shiftParts;
 
 describe('round', function() {
   it('accepts strings', function() {
@@ -268,5 +276,11 @@ describe('shift', function() {
     expect(shift('Infinity', 1)).to.be('Infinity');
     expect(shift('-Infinity', 1)).to.be('-Infinity');
     expect(shift('NaN', 1)).to.be('NaN');
+  });
+});
+
+describe('shiftParts', function() {
+  it('works like shift but with arrays', function() {
+    expect(shiftParts([true, '12', '34'], 2)).to.eql([true, '1234', '']);
   });
 });
