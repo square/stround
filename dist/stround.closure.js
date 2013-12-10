@@ -203,7 +203,7 @@ stround.shift = function(strnum, exponent) {
  * precision and mode.
  *
  * @param {string|number} strnum
- * @param {number} precision
+ * @param {number|null|undefined} precision
  * @param {stround.modes} mode
  * @return {string}
  */
@@ -220,7 +220,7 @@ stround.round = function(strnum, precision, mode) {
     return strnum;
   }
 
-  if (precision === undefined) {
+  if (precision === null || precision === undefined) {
     precision = 0;
   }
 
