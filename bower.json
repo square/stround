@@ -1,0 +1,22 @@
+{
+  "name": "stround",
+  "version": "0.1.0",
+  "homepage": "https://github.com/square/stround",
+  "authors": [
+    "Brian Donovan <donovan@squareup.com>"
+  ],
+  "description": "Rounding methods for exact numbers using strings.",
+  "main": "dist/stround.js",
+  "keywords": [
+    "rounding",
+    "math"
+  ],
+  "license": "Apache 2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
