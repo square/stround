@@ -2,9 +2,9 @@ var expect = require('expect.js');
 
 var stround;
 if (process.env.TEST_MODE) {
-  stround = require('../dist/stround.'+process.env.TEST_MODE).stround;
+  stround = require('../dist/stround.'+process.env.TEST_MODE);
 } else {
-  stround = require('../lib');
+  stround = require('../dist/stround');
 }
 
 var round = stround.round;

@@ -8,7 +8,9 @@
   },
   "scripts": {
     "build": "make clean all",
-    "test": "mocha --recursive --reporter spec --no-colors --timeout 500 test && env TEST_MODE=min mocha --recursive --reporter spec --no-colors --timeout 500 test && env TEST_MODE=closure mocha --recursive --reporter spec --no-colors --timeout 500 test"
+    "test": "mocha --recursive --reporter spec --timeout 500 test",
+    "test-min": "env TEST_MODE=min mocha --recursive --reporter spec --timeout 500 test",
+    "test-all": "npm test && npm run test-min"
   },
   "repository": {
     "type": "git",
