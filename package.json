@@ -2,7 +2,7 @@
   "name": "stround",
   "version": "0.2.0",
   "description": "Rounding methods for exact numbers using strings.",
-  "main": "lib/index.js",
+  "main": "dist/stround.js",
   "directories": {
     "test": "test"
   },
