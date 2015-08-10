@@ -8,9 +8,10 @@
   },
   "scripts": {
     "build": "make clean all",
-    "test": "mocha --recursive --reporter spec --timeout 500 test",
-    "test-min": "env TEST_MODE=min mocha --recursive --reporter spec --timeout 500 test",
-    "test-all": "npm test && npm run test-min"
+    "test": "mocha --compilers js:babel/register --recursive --reporter spec --timeout 500 test",
+    "test-dist": "env TEST_MODE=dist mocha --compilers js:babel/register --recursive --reporter spec --timeout 500 test",
+    "test-dist-min": "env TEST_MODE=dist-min mocha --compilers js:babel/register --recursive --reporter spec --timeout 500 test",
+    "test-all": "npm test && npm run test-dist && npm run test-dist-min"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "mocha": "~1.14.0",
     "expect.js": "~0.2.0",
-    "through": "~2.3.4"
+    "through": "~2.3.4",
+    "babel": "^5.8.21"
   }
 }
