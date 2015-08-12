@@ -9,3 +9,4 @@ env:
   global:
   - secure: Cjon88BfxemYEJyeyhy1PybPNGcI9ic11Ipees9kOeJ641F46gN7m89+esaTkwzJ5AItMy+mTtSrgm9nPTKesenoii/WZ4SI27NYu1LmLrTfo1xtdFTLHziUFXfSaAX/UJvtDnOOrLYJoGuY8PkvecCycBl3ndvhXl+mIKuvmPU=
   - secure: CTJMzsAsIWLNsI968BrO3AeWydclLpMunLR/g1NB1n8a7yAebD/7wIZnw07dE3pZNviYY9WAMqV67a/Jh61X0QMpzcPNnAradcQeHYvUjSOvtoSlTRbPLaXrad9kvYnkn7jg+zwDbURwupblvbP3PJh7P+81hc+r6HPuyim4Ihk=
+sudo: false
