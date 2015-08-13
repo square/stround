@@ -16,9 +16,10 @@ $ npm install stround
 ```js
 $ node
 > var stround = require('stround');
-{}
+// Extract exports for examples below.
 > var round = stround.round;
-[Function]
+> var shift = stround.shift;
+> var modes = stround.modes;
 ```
 
 Round to integers if no precision is specified:
@@ -53,36 +54,36 @@ The result will have the specified precision:
 Round toward positive infinity:
 
 ```js
-> round('1.1', 0, stround.modes.CEILING);
+> round('1.1', 0, modes.CEILING);
 '2'
-> round('-1.1', 0, stround.modes.CEILING);
+> round('-1.1', 0, modes.CEILING);
 '-1'
 ```
 
 Round toward negative infinity:
 
 ```js
-> round('1.8', 0, stround.modes.FLOOR);
+> round('1.8', 0, modes.FLOOR);
 '1'
-> round('-1.8', 0, stround.modes.FLOOR);
+> round('-1.8', 0, modes.FLOOR);
 '-2'
 ```
 
 Round toward zero:
 
 ```js
-> round('1.8', 0, stround.modes.DOWN);
+> round('1.8', 0, modes.DOWN);
 '1'
-> round('-1.8', 0, stround.modes.DOWN);
+> round('-1.8', 0, modes.DOWN);
 '-1'
 ```
 
 Round away from zero:
 
 ```js
-> round('1.1', 0, stround.modes.UP);
+> round('1.1', 0, modes.UP);
 '2'
-> round('-1.1', 0, stround.modes.UP);
+> round('-1.1', 0, modes.UP);
 '-2'
 ```
 
@@ -90,67 +91,67 @@ Round towards the nearest integer, or towards an even number if equidistant
 (this is the default):
 
 ```js
-> round('1.4', 0, stround.modes.HALF_EVEN);
+> round('1.4', 0, modes.HALF_EVEN);
 '1'
-> round('1.5', 0, stround.modes.HALF_EVEN);
+> round('1.5', 0, modes.HALF_EVEN);
 '2'
-> round('2.5', 0, stround.modes.HALF_EVEN);
+> round('2.5', 0, modes.HALF_EVEN);
 '2'
-> round('-2.5', 0, stround.modes.HALF_EVEN);
+> round('-2.5', 0, modes.HALF_EVEN);
 '-2'
-> round('2.6', 0, stround.modes.HALF_EVEN);
+> round('2.6', 0, modes.HALF_EVEN);
 '3'
 ```
 
 Round towards the nearest integer, or towards zero if equidistant:
 
 ```js
-> round('1.4', 0, stround.modes.HALF_DOWN);
+> round('1.4', 0, modes.HALF_DOWN);
 '1'
-> round('1.5', 0, stround.modes.HALF_DOWN);
+> round('1.5', 0, modes.HALF_DOWN);
 '1'
-> round('2.5', 0, stround.modes.HALF_DOWN);
+> round('2.5', 0, modes.HALF_DOWN);
 '2'
-> round('-2.5', 0, stround.modes.HALF_DOWN);
+> round('-2.5', 0, modes.HALF_DOWN);
 '-2'
-> round('2.6', 0, stround.modes.HALF_DOWN);
+> round('2.6', 0, modes.HALF_DOWN);
 '3'
 ```
 
 Round towards the nearest integer, or away from zero if equidistant:
 
 ```js
-> round('1.4', 0, stround.modes.HALF_UP);
+> round('1.4', 0, modes.HALF_UP);
 '1'
-> round('1.5', 0, stround.modes.HALF_UP);
+> round('1.5', 0, modes.HALF_UP);
 '2'
-> round('2.5', 0, stround.modes.HALF_UP);
+> round('2.5', 0, modes.HALF_UP);
 '3'
-> round('-2.5', 0, stround.modes.HALF_UP);
+> round('-2.5', 0, modes.HALF_UP);
 '-3'
-> round('2.6', 0, stround.modes.HALF_UP);
+> round('2.6', 0, modes.HALF_UP);
 '3'
 ```
 
 It is sometimes convenient to adjust the exponent of a number, too:
 
 ```js
-> stround.shift('12', 2);
+> shift('12', 2);
 '1200'
-> stround.shift('123.4', -2);
+> shift('123.4', -2);
 '1.234'
 ```
 
 And sometimes it's useful to keep the decimal parts in a tuple:
 
 ```js
-> stround.shift([false, '12', '34'], 2)
+> shift([false, '12', '34'], 2)
 [false, '1234', '']
 ```
 
 ## Contributing
 
-[![Build Status](https://travis-ci.org/square/stround.png?branch=master)](https://travis-ci.org/square/stround)
+[![Build Status](https://travis-ci.org/square/png?branch=master)](https://travis-ci.org/square/stround)
 
 ### Setup
 
