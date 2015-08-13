@@ -4,6 +4,10 @@
   "description": "Rounding methods for exact numbers using strings.",
   "main": "dist/stround.js",
   "jsnext:main": "lib/stround.js",
+  "files": [
+    "dist/stround.js",
+    "lib/stround.js"
+  ],
   "directories": {
     "test": "test"
   },
